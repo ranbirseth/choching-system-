@@ -9,7 +9,7 @@ const {
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 router.route('/')
-    .get(protect, getBatches)
+    .get(getBatches) // Made public for admission applications
     .post(protect, authorize('Admin', 'Teacher'), createBatch);
 
 router.route('/:id')
