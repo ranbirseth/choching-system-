@@ -16,7 +16,26 @@ const gradeRoutes = require('./routes/gradeRoutes');
 const app = express();
 
 // Middleware
-app.use(cors({ origin: true, credentials: true })); // Configure true origin in production
+const allowedOrigins = [
+    'https://choching-system.vercel.app',
+    'https://choching-system.onrender.com', // Also allow the render URL itself
+    'http://localhost:5173',
+    'http://localhost:5174', // Common alternative vite ports
+    'http://localhost:5175'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
