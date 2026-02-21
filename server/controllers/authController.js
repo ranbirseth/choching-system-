@@ -49,8 +49,10 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(`Login attempt for email: ${email}`);
 
         const user = await User.findOne({ email });
+        console.log(`User found: ${!!user}`);
 
         if (user && (await user.matchPassword(password))) {
             const accessToken = generateAccessToken(user._id);
@@ -65,9 +67,11 @@ const loginUser = async (req, res) => {
                 refreshToken,
             });
         } else {
+            console.log('Login failed: Invalid email or password');
             res.status(401).json({ message: 'Invalid email or password' });
         }
     } catch (error) {
+        console.error(`Login error: ${error.message}`);
         res.status(500).json({ message: error.message });
     }
 };
