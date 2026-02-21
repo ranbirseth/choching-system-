@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import api from '../services/api';
 
 const ApplyAdmission = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const ApplyAdmission = () => {
       // Because /api/batches is protected, and we are not logged in, we need a public route.
       // This is a placeholder logic. For a real system, we'd add `router.get('/public', publicBatches)` to backend.
       // Let's assume we can fetch it, if not it will fail gracefully.
-      const res = await axios.get('http://localhost:5000/api/batches', {
+      const res = await api.get('/batches', {
         headers: {
             // Need authorization for the protected route, so we will fail here unless backend is updated.
         }
@@ -44,7 +44,7 @@ const ApplyAdmission = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/admissions/register', formData);
+      await api.post('/admissions/register', formData);
       toast.success('Admission application submitted successfully! Please wait for approval.');
       navigate('/login');
     } catch (error) {
