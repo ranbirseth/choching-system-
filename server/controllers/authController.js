@@ -52,24 +52,29 @@ const loginUser = async (req, res) => {
         console.log(`Login attempt for email: ${email}`);
 
         const user = await User.findOne({ email });
-        console.log(`User found: ${!!user}`);
+        console.log(`User query result for ${email}: ${user ? 'Found' : 'NOT FOUND'}`);
 
-        if (user && (await user.matchPassword(password))) {
-            const accessToken = generateAccessToken(user._id);
-            const refreshToken = await RefreshToken.createToken(user);
+        if (user) {
+            const isMatch = await user.matchPassword(password);
+            console.log(`Password match result for ${email}: ${isMatch}`);
 
-            res.json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                accessToken,
-                refreshToken,
-            });
-        } else {
-            console.log('Login failed: Invalid email or password');
-            res.status(401).json({ message: 'Invalid email or password' });
+            if (isMatch) {
+                const accessToken = generateAccessToken(user._id);
+                const refreshToken = await RefreshToken.createToken(user);
+
+                return res.json({
+                    _id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    accessToken,
+                    refreshToken,
+                });
+            }
         }
+
+        console.log(`Login failed for ${email}: Returning 401`);
+        res.status(401).json({ message: 'Invalid email or password' });
     } catch (error) {
         console.error(`Login error: ${error.message}`);
         res.status(500).json({ message: error.message });
