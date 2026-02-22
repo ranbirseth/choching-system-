@@ -47,6 +47,21 @@ app.use(cookieParser());
 //     app.use(express.static(path.join(__dirname, '../client/dist')));
 // }
 
+app.get('/api/auth/debug-db', async (req, res) => {
+    try {
+        const mongoose = require('mongoose');
+        const User = require('./models/User');
+        const count = await User.countDocuments();
+        res.json({
+            database: mongoose.connection.name,
+            userCount: count,
+            status: 'Connected'
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/subjects', subjectRoutes);
