@@ -12,10 +12,11 @@ const connectDB = async () => {
     console.log(`Attempting to connect to MongoDB with URI: ${maskedUri}`);
 
     const conn = await mongoose.connect(uri);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-    console.log('Using database:', conn.connection.name);
+    console.log(`MongoDB Connected successfully to host: ${conn.connection.host}`);
+    console.log('Database name:', conn.connection.name);
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error(`DATABASE CONNECTION ERROR: ${error.message}`);
+    console.log('Check your MONGO_URI in Render Settings. It should NOT contain "?tuitionDB="');
     process.exit(1);
   }
 };
