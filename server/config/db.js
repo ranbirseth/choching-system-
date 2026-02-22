@@ -16,14 +16,16 @@ const connectDB = async () => {
 
     // Mask password for safe logging
     const maskedUri = uri.replace(/:([^:@]+)@/, ':****@');
-    console.log(`Attempting to connect with URI: ${maskedUri}`);
+    console.log(`Attempting to connect with URI (sanitized): ${maskedUri}`);
 
-    const conn = await mongoose.connect(uri);
+    const conn = await mongoose.connect(uri, {
+      dbName: 'ChochingSystemV0'
+    });
     console.log(`MongoDB Connected successfully to host: ${conn.connection.host}`);
-    console.log('Database name:', conn.connection.name);
+    console.log(`Using database: ${conn.connection.name}`);
   } catch (error) {
     console.error(`DATABASE CONNECTION ERROR: ${error.message}`);
-    console.log('Check your MONGO_URI in Render Settings. It should NOT contain "?tuitionDB="');
+    console.log('Check your MONGO_URI in Render Settings.');
     process.exit(1);
   }
 };
