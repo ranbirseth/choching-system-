@@ -41,10 +41,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Serve static files from the React app
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-}
+// Serve static files from the React app (Only if deploying everything on one service)
+// if (process.env.NODE_ENV === 'production') {
+//     app.use(express.static(path.join(__dirname, '../client/dist')));
+// }
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -62,12 +62,12 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
-// Serve frontend for any other routes in production
-if (process.env.NODE_ENV === 'production') {
-    app.get('*', (req, res) =>
-        res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'))
-    );
-}
+// Serve frontend for any other routes (Commented out because you are using Vercel)
+// if (process.env.NODE_ENV === 'production') {
+//     app.get('*', (req, res) =>
+//         res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'))
+//     );
+// }
 
 // Error Handling Middleware
 app.use(notFound);
