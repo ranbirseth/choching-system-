@@ -17,6 +17,7 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
+    'https://choching-system-tulq.vercel.app',
     'https://choching-system-w9ua.vercel.app',
     'https://choching-system-5.onrender.com', // Also allow the render URL itself
     'http://localhost:5173',
