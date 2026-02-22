@@ -4,15 +4,11 @@ const User = require('./models/User');
 
 dotenv.config();
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('MongoDB Connected for Seeding...');
-    } catch (error) {
-        console.error(`Error: ${error.message}`);
-        process.exit(1);
-    }
-};
+const connectDB = require('./config/db');
+
+dotenv.config();
+
+// (The local connectDB function is removed as we now use the one from config/db.js)
 
 const seedAdmin = async () => {
     try {
